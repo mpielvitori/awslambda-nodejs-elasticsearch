@@ -6,6 +6,14 @@ Sample Serverless and ElasticSearch Project with NodeJS using ECMAScript 6
 - [Install the Serverless Framework](https://serverless.com/framework/docs/providers/aws/guide/installation/)
 - [Configure your AWS CLI](https://serverless.com/framework/docs/providers/aws/guide/credentials/)
 
+### Install environment
+
+###### DockerCompose
+docker-compose up
+
+###### Docker
+docker build .
+
 ### Usage
 
 Run a function locally

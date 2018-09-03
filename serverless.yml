@@ -49,33 +49,4 @@ custom:
   es_domain: "${self:service}-${self:custom.stage}"
   serverless-offline:
     port: 4010
-  ELASTICSEARCH_ENDPOINT: "${opt:ELASTICSEARCH_ENDPOINT:${self:custom.stage}.ELASTICSEARCH_ENDPOINT, self:resources.Outputs.ElasticSearchEndpoint.Value}"
-
-resources:
-  Resources:
-    ElasticSearchInstance:
-      Type: AWS::Elasticsearch::Domain
-      Properties:
-        DomainName: "${self:custom.es_domain}"
-        EBSOptions:
-          EBSEnabled: true
-          VolumeType: gp2
-          VolumeSize: 10
-        ElasticsearchClusterConfig:
-          InstanceType: t2.small.elasticsearch
-          InstanceCount: 1
-          DedicatedMasterEnabled: false
-          ZoneAwarenessEnabled: false
-        ElasticsearchVersion: "6.0"
-  Outputs:
-    ElasticSearchEndpoint:
-      Value:
-        Fn::Join: [
-          '',
-          [ 'https://',
-            Fn::GetAtt: [
-              ElasticSearchInstance,
-              DomainEndpoint
-            ]
-          ]
-        ]
+  ELASTICSEARCH_ENDPOINT: "${opt:ELASTICSEARCH_ENDPOINT:${self:custom.stage}.ELASTICSEARCH_ENDPOINT}"
