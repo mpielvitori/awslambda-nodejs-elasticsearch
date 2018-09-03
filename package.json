@@ -1,0 +1,48 @@
+{
+  "name": "serverless.sample",
+  "version": "1.0.0",
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mpielvitori/Serverless-NodeJS-ElasticSearch"
+  },
+  "author": "Martín Pielvitori",
+  "license": "MIT",
+  "etc": {
+    "logging": {
+      "cli": "info"
+    }
+  },
+  "scripts": {
+    "test": "jest",
+    "lint": "./node_modules/.bin/eslint --fix src",
+    "build": "rm -rf lib/**; ./node_modules/.bin/babel src --out-dir lib --copy-files",
+    "offline": "npm run build && sls offline -o 0.0.0.0 -P 4010 --stage",
+    "deploy": "npm run build && sls deploy -v --stage",
+    "local-function": "npm run build && sls invoke local --function"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-eslint": "^8.2.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.6.1",
+    "eslint": "^4.15.0",
+    "eslint-config-google": "^0.9.1",
+    "eslint-config-recommended": "^2.0.0",
+    "eslint-plugin-jest": "^21.6.2",
+    "jest": "^21.2.1",
+    "serverless-offline": "^3.20.3"
+  },
+  "dependencies": {
+    "babel-runtime": "^6.26.0",
+    "bluebird": "^3.5.1",
+    "bodybuilder": "^2.2.10",
+    "debug": "^3.1.0",
+    "elasticsearch": "^13.0.1",
+    "etc": "^1.1.0",
+    "etc-yaml": "^0.0.5",
+    "winston": "^3.0.0-rc1"
+  }
+}

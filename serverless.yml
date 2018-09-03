@@ -1,0 +1,81 @@
+service: serverless-sample
+
+plugins:
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  memorySize: 128
+  environment:
+    NODE_ENV: ${self:custom.stage}
+    ELASTICSEARCH_ENDPOINT: ${self:custom.ELASTICSEARCH_ENDPOINT}
+  region: us-east-1
+
+functions:
+  bulkDummyVideogamesData:
+    handler: lib/handler.bulkDummyVideogamesData
+    events:
+      - http:
+          path: videogames/bulkDummyData
+          method: get
+  resetVideogamesIndex:
+    handler: lib/handler.resetVideogamesIndex
+    events:
+      - http:
+          path: videogames/resetIndex
+          method: get
+  searchVideogames:
+    handler: lib/handler.searchVideogames
+    events:
+      - http:
+          path: videogames/search
+          method: get
+  createVideogame:
+    handler: lib/handler.createVideogame
+    events:
+      - http:
+          path: videogames
+          method: post
+  ping:
+    handler: lib/handler.ping
+    events:
+      - http:
+          path: es/ping
+          method: get
+
+custom:
+  stage: ${opt:stage, 'local'}
+  es_domain: "${self:service}-${self:custom.stage}"
+  serverless-offline:
+    port: 4010
+  ELASTICSEARCH_ENDPOINT: "${opt:ELASTICSEARCH_ENDPOINT:${self:custom.stage}.ELASTICSEARCH_ENDPOINT, self:resources.Outputs.ElasticSearchEndpoint.Value}"
+
+resources:
+  Resources:
+    ElasticSearchInstance:
+      Type: AWS::Elasticsearch::Domain
+      Properties:
+        DomainName: "${self:custom.es_domain}"
+        EBSOptions:
+          EBSEnabled: true
+          VolumeType: gp2
+          VolumeSize: 10
+        ElasticsearchClusterConfig:
+          InstanceType: t2.small.elasticsearch
+          InstanceCount: 1
+          DedicatedMasterEnabled: false
+          ZoneAwarenessEnabled: false
+        ElasticsearchVersion: "6.0"
+  Outputs:
+    ElasticSearchEndpoint:
+      Value:
+        Fn::Join: [
+          '',
+          [ 'https://',
+            Fn::GetAtt: [
+              ElasticSearchInstance,
+              DomainEndpoint
+            ]
+          ]
+        ]

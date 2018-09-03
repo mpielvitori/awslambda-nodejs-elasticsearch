@@ -1,0 +1,50 @@
+{
+    "mappings": {
+      "videogames": {
+        "properties": {
+            "title": {
+              "type": "text",
+              "fields": {
+                "raw": {
+                  "type": "keyword"
+                }
+              },
+              "fielddata": true
+            },
+            "createdDate": {
+              "type": "date"
+            },
+            "releaseDate": {
+              "type": "date"
+            },
+            "creator": {
+              "type": "keyword",
+              "null_value": "anonymous"
+            },
+            "company": {
+              "type": "text",
+              "fields": {
+                "raw": {
+                  "type": "keyword"
+                }
+              },
+              "fielddata": true
+            },
+            "creatorId": {
+              "type": "short"
+            },
+            "sales": {
+              "type": "integer"
+            },
+            "platforms": {
+              "properties": {
+                "console": {
+                  "type": "keyword",
+                  "fielddata": true
+                }
+              }
+            }
+        }
+      }
+    }
+}
