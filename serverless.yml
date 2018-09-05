@@ -49,4 +49,4 @@ custom:
   es_domain: "${self:service}-${self:custom.stage}"
   serverless-offline:
     port: 4010
-  ELASTICSEARCH_ENDPOINT: "${opt:ELASTICSEARCH_ENDPOINT:${self:custom.stage}.ELASTICSEARCH_ENDPOINT}"
+  ELASTICSEARCH_ENDPOINT: "${env:ELASTICSEARCH_ENDPOINT:${self:custom.stage}.ELASTICSEARCH_ENDPOINT}"

@@ -11,10 +11,10 @@ Sample Serverless and ElasticSearch Project with NodeJS using ECMAScript 6
 ###### DockerCompose
 docker-compose up
 
-###### Test ES connection http://localserver:4010/es/ping
+###### Test ES connection http://localhost:4010/es/ping
 ###### Create index http://localhost:4010/videogames/resetIndex
 ###### Bulk dummy data http://localhost:4010/videogames/bulkDummyData
-###### Kibana Query on http://localserver:5601/app/kibana#/dev_tools
+###### Kibana Query on http://localhost:5601/app/kibana#/dev_tools
 GET /videogames/_search
 {
   "size": 273,
