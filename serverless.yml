@@ -9,44 +9,17 @@ provider:
   memorySize: 128
   environment:
     NODE_ENV: ${self:custom.stage}
-    ELASTICSEARCH_ENDPOINT: ${self:custom.ELASTICSEARCH_ENDPOINT}
   region: us-east-1
 
 functions:
-  bulkDummyVideogamesData:
-    handler: lib/handler.bulkDummyVideogamesData
+  isMutant:
+    handler: lib/handler.isMutant
     events:
       - http:
-          path: videogames/bulkDummyData
-          method: get
-  resetVideogamesIndex:
-    handler: lib/handler.resetVideogamesIndex
-    events:
-      - http:
-          path: videogames/resetIndex
-          method: get
-  searchVideogames:
-    handler: lib/handler.searchVideogames
-    events:
-      - http:
-          path: videogames/search
-          method: get
-  createVideogame:
-    handler: lib/handler.createVideogame
-    events:
-      - http:
-          path: videogames
+          path: mutant
           method: post
-  ping:
-    handler: lib/handler.ping
-    events:
-      - http:
-          path: es/ping
-          method: get
 
 custom:
   stage: ${opt:stage, 'local'}
-  es_domain: "${self:service}-${self:custom.stage}"
   serverless-offline:
     port: 4010
-  ELASTICSEARCH_ENDPOINT: "${env:ELASTICSEARCH_ENDPOINT:${self:custom.stage}.ELASTICSEARCH_ENDPOINT}"
