@@ -42,5 +42,15 @@
     "debug": "^3.1.0",
     "elasticsearch": "^13.0.1",
     "winston": "^3.0.0-rc1"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "coverageDirectory": "./coverage",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/tests/"
+    ],
+    "verbose": true,
+    "testEnvironment": "node"
   }
 }

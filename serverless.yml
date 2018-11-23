@@ -1,4 +1,4 @@
-service: serverless-sample
+service: mutants-serverless
 
 plugins:
   - serverless-offline
