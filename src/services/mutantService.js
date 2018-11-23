@@ -1,5 +1,5 @@
 
-import {default as createResponse} from '../util/createResponse';
+import {createResponse} from '../util/lambdaUtils';
 import {createLogger} from '../logger';
 
 const logger = createLogger(__filename);
@@ -11,7 +11,7 @@ const logger = createLogger(__filename);
 export async function isMutant(event) {
     const request = JSON.parse(event.body);
     logger.info(`Check if DNA: ${request.dna} is mutant`);
-    
+
     let isMutant = checkDNA(request.dna);
 
     if (isMutant){
