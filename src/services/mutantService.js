@@ -1,6 +1,7 @@
 
 import {createResponse} from '../util/lambdaUtils';
 import {createLogger} from '../logger';
+import * as dnaDAO from '../daos/dna';
 
 const logger = createLogger(__filename);
 
@@ -14,16 +15,24 @@ export async function isMutant(event) {
 
     let isMutant = checkDNA(request.dna);
 
-    if (isMutant){
+    try {
+        await dnaDAO.save(request.dna, isMutant);
+    } catch (error) {
+        logger.error(`A problem occurs persisting dna: ${error}`);
+        return createResponse(error.message, 500);
+    }
+
+    if (isMutant) {
         return createResponse('OK');
     } else {
         return createResponse('Forbidden', 403);
-    }    
+    }
 }
 
 /**
  * Check DNA matrix
- * @param {array<string>} arr 
+ * @param {array<string>} arr
+ * @return {boolean}
  */
 function checkDNA(arr) {
     let len = arr.length;
@@ -40,9 +49,9 @@ function checkDNA(arr) {
                 arr[i][j] === arr[i][j+3]
             ) {
                 matchCount++;
-                if (matchCount === 2){    	
-                    return true;	
-				}
+                if (matchCount === 2) {
+                    return true;
+                }
             }
             // Compara columna arr-aba
             if (
@@ -51,9 +60,9 @@ function checkDNA(arr) {
                 arr[j][i] === arr[j+3][i]
             ) {
                 matchCount++;
-                if (matchCount === 2){    	
-                    return true;	
-				}
+                if (matchCount === 2) {
+                    return true;
+                }
             }
             // Compara diagonal izq-arr -> der-aba
             if (
@@ -63,11 +72,11 @@ function checkDNA(arr) {
                 arr[i][j] === arr[i+3][j+3]
             ) {
                 matchCount++;
-                if (matchCount === 2){    	
-                    return true;	
-				}
+                if (matchCount === 2) {
+                    return true;
+                }
             }
-			// Compara diagonal izq-aba -> der-arr
+            // Compara diagonal izq-aba -> der-arr
             if (
                 i <= top &&
                 arr[max-i][j] === arr[max-i-1][j+1] &&
@@ -75,9 +84,9 @@ function checkDNA(arr) {
                 arr[max-i][j] === arr[max-i-3][j+3]
             ) {
                 matchCount++;
-                if (matchCount === 2){    	
-                    return true;	
-				}
+                if (matchCount === 2) {
+                    return true;
+                }
             }
         }
     }

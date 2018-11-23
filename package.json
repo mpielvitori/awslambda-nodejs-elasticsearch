@@ -41,7 +41,8 @@
     "bodybuilder": "^2.2.10",
     "debug": "^3.1.0",
     "elasticsearch": "^13.0.1",
-    "winston": "^3.0.0-rc1"
+    "winston": "^3.0.0-rc1",
+    "aws-sdk": "^2.223.1"
   },
   "jest": {
     "collectCoverage": true,
