@@ -8,7 +8,7 @@ provider:
   runtime: nodejs8.10
   role: ${file(./config/config.${self:custom.stage}.json):DNA_DYNAMODB_ROLE}
   region: ${file(./config/config.${self:custom.stage}.json):AWS_REGION}
-  memorySize: 128
+  memorySize: 512
   environment:
     NODE_ENV: ${self:custom.stage}
     DYNAMODB_TABLE: ${file(./config/config.${self:custom.stage}.json):DNA_DYNAMODB_TABLE}
@@ -22,7 +22,7 @@ functions:
           method: post
 
 custom:
-  stage: ${opt:stage, 'local'}
+  stage: ${opt:stage}
   serverless-offline:
     port: 4010
 
@@ -30,17 +30,14 @@ resources:
   Resources:
     DNADynamoDbTable:
       Type: 'AWS::DynamoDB::Table'
-      DeletionPolicy: Retain
       Properties:
         AttributeDefinitions:
-          -
-            AttributeName: id
+          - AttributeName: dnakey
             AttributeType: S
         KeySchema:
-          -
-            AttributeName: id
+          - AttributeName: dnakey
             KeyType: HASH
         ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
         TableName: ${self:provider.environment.DYNAMODB_TABLE}

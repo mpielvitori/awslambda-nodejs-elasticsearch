@@ -2,5 +2,6 @@ config/**
 coverage/**
 lib/**
 node_modules/**
+.serverless/**
 
 yarn-error.log

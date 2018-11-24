@@ -1,10 +1,12 @@
 
-import * as AWS from 'aws-sdk';
 import {createLogger} from '../logger';
+import {DynamoDB} from 'aws-sdk';
 
 const logger = createLogger(__filename);
+const REGION = process.env.AWS_REGION || 'sa-east-1';
+const DYNAMODB_TABLE = process.env.DYNAMODB_TABLE || 'dna-test';
 
-const dynamoDb = new AWS.DynamoDB.DocumentClient();
+const dynamoDb = new DynamoDB.DocumentClient({region: REGION});
 
 /**
  * @param {array<string>} dna
@@ -17,7 +19,7 @@ export async function save(dna, mutant) {
   const dnakey = dna.join('');
 
   const params = {
-    TableName: process.env.DYNAMODB_TABLE,
+    TableName: DYNAMODB_TABLE,
     Item: {
       dnakey,
       mutant,

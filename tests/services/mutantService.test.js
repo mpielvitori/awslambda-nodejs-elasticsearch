@@ -1,7 +1,17 @@
 
 import * as mutantService from '../../src/services/mutantService';
+import * as AWS from 'aws-sdk-mock';
 
 describe('Mutants service', () => {
+    beforeAll(() => {
+        AWS.mock('DynamoDB', 'putItem', function (params, callback){
+            callback(null, "successfully put item in database");
+        });
+    });
+
+    beforeEach(() => {
+    });
+
 	test('Mutant positive result example DNA', async () => {
         const request = {
             body: JSON.stringify(
