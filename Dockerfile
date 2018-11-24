@@ -16,7 +16,7 @@ RUN yarn global add serverless@$SERVERLESS_VERSION
 
 COPY package.json yarn.lock /src/
 
-RUN yarn install --ignore-scripts --production=false --non-interactive
+RUN yarn install --ignore-scripts --non-interactive
 
 ADD . /src
 
