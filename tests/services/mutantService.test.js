@@ -9,9 +9,6 @@ describe('Mutants service', () => {
         });
     });
 
-    beforeEach(() => {
-    });
-
 	test('Mutant positive result example DNA', async () => {
         const request = {
             body: JSON.stringify(
@@ -94,5 +91,11 @@ describe('Mutants service', () => {
         
 		expect(result.statusCode).toBe(403);
         expect(JSON.parse(result.body)).toBe('Forbidden');
-	});
+    });
+    
+    test('Return dna stats', async () => { 
+        const stats = await mutantService.stats();
+
+        expect(stats.statusCode).toBe(200);
+    });
 });
