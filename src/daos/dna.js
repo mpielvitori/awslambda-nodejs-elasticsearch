@@ -36,3 +36,29 @@ export async function save(dna, mutant) {
     throw error;
   }
 }
+
+/**
+ * @return {object}
+*/
+export async function stats() {
+  const params = {
+    TableName: DYNAMODB_TABLE,
+    FilterExpression: 'mutant = :mutantValue',
+    ExpressionAttributeValues: {
+      ':mutantValue': true,
+    },
+    Select: 'COUNT',
+  };
+
+  try {
+    const data = await dynamoDb.scan(params).promise();
+    return {
+      count_mutant_dna: data.Count,
+      count_human_dna: data.ScannedCount - data.Count,
+      ratio: data.Count / (data.ScannedCount - data.Count),
+    };
+  } catch (error) {
+    logger.error(error.stack);
+    throw error;
+  }
+}

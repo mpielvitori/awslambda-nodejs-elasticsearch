@@ -30,6 +30,23 @@ export async function isMutant(event) {
 }
 
 /**
+ * @return {object}
+*/
+export async function stats() {
+    logger.info(`DNA stats`);
+    let result;
+
+    try {
+        result = await dnaDAO.stats();
+    } catch (error) {
+        logger.error(`A problem occurs persisting dna: ${error}`);
+        return createResponse(error.message, 500);
+    }
+
+    return createResponse(result);
+}
+
+/**
  * Check DNA matrix
  * @param {array<string>} arr
  * @return {boolean}

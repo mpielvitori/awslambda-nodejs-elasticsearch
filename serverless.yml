@@ -20,6 +20,12 @@ functions:
       - http:
           path: mutant
           method: post
+  stats:
+    handler: lib/handler.stats
+    events:
+      - http:
+          path: stats
+          method: get
 
 custom:
   stage: ${opt:stage}
