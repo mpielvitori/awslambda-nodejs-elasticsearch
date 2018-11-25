@@ -1,15 +1,11 @@
 
 import * as mutantService from '../../src/services/mutantService';
-import * as AWS from 'aws-sdk-mock';
+import * as dnaDAO from '../../src/daos/dna';
+jest.mock('../../src/daos/dna');
 
 describe('Mutants service', () => {
-    beforeAll(() => {
-        AWS.mock('DynamoDB', 'putItem', function (params, callback){
-            callback(null, "successfully put item in database");
-        });
-    });
 
-	test('Mutant positive result example DNA', async () => {
+	test('Mutant positive result given example', async () => {
         const request = {
             body: JSON.stringify(
                 {
@@ -97,5 +93,51 @@ describe('Mutants service', () => {
         const stats = await mutantService.stats();
 
         expect(stats.statusCode).toBe(200);
+    });
+
+    describe('Mutant check error', () => {
+        beforeEach(() => {
+            dnaDAO.save = jest.fn().mockImplementation(() => {
+                throw new Error();
+            });
+        });
+        afterEach(() => {
+            dnaDAO.save = () => {return jest.fn()};
+        });
+
+        test('Expect an error', async () => {
+            const request = {
+                body: JSON.stringify(
+                    {
+                        dna:['ATGCGA','CAGTGC','TTATGT','AGAAGG','CCCCTA','TCACTG']
+                    }
+                )
+            };
+
+            try {
+                await mutantService.isMutant(request);
+            } catch (error) {
+                expect(error).toBeDefined();
+            }
+        });
+    });
+
+    describe('Mutant stats error', () => {
+        beforeEach(() => {
+            dnaDAO.stats = jest.fn().mockImplementation(() => {
+                throw new Error();
+            });
+        });
+        afterEach(() => {
+            dnaDAO.stats = () => {return jest.fn()};
+        });
+
+        test('Expect an error', async () => {
+            try {
+                await mutantService.stats();
+            } catch (error) {
+                expect(error).toBeDefined();
+            }
+        });
     });
 });
