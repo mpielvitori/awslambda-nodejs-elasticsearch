@@ -1,6 +1,7 @@
 
 import * as dao from '../../src/daos/dna';
 import * as AWS from 'aws-sdk-mock';
+import {DynamoDB} from 'aws-sdk';
 
 describe('DNA DAO', () => {
     describe('DynamoDB creation', () => {

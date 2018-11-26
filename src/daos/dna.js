@@ -7,9 +7,9 @@ const REGION = process.env.AWS_REGION || 'sa-east-1';
 const DYNAMODB_TABLE = process.env.DYNAMODB_TABLE || 'dna-test';
 
 AWS.config.update({region: REGION});
-// const dynamoDb = new DynamoDB.DocumentClient({region: REGION});
 
 /**
+ * Persist DNA record
  * @param {array<string>} dna
  * @param {boolean} mutant
  * @return {object}
@@ -40,9 +40,35 @@ export async function save(dna, mutant) {
 }
 
 /**
+ * Mutants stats
  * @return {object}
-*/
+ */
 export async function stats() {
+  try {
+    const data = await scanDNATable();
+    const humans = data.scannedCount - data.count;
+    let ratio;
+    if (humans > 0) {
+      ratio = data.count / humans;
+    } else {
+      ratio = data.count > 0 ? 1 : 0;
+    }
+    return {
+      count_mutant_dna: data.count,
+      count_human_dna: data.scannedCount - data.count,
+      ratio,
+    };
+  } catch (error) {
+    logger.error(error.stack);
+    throw error;
+  }
+}
+
+/**
+ * Paginated scan for DNA table
+ * @return {object}
+ */
+async function scanDNATable() {
   const dynamoDb = new AWS.DynamoDB.DocumentClient();
   const params = {
     TableName: DYNAMODB_TABLE,
@@ -53,23 +79,24 @@ export async function stats() {
     Select: 'COUNT',
   };
 
-  try {
-    const data = await dynamoDb.scan(params).promise();
-    const humans = data.ScannedCount - data.Count;
-    let ratio;
-    if (humans > 0) {
-      ratio = data.Count / humans;
-    } else {
-      ratio = data.Count > 0 ? 1 : 0;
-    }
+  let scannedCount = 0;
+  let count = 0;
+  let remainingData = true;
+  let result;
+  while (remainingData) {
+    result = await dynamoDb.scan(params).promise();
+    scannedCount += result.ScannedCount;
+    count += result.Count;
 
-    return {
-      count_mutant_dna: data.Count,
-      count_human_dna: data.ScannedCount - data.Count,
-      ratio,
-    };
-  } catch (error) {
-    logger.error(error.stack);
-    throw error;
+    if (result.LastEvaluatedKey) {
+      params.ExclusiveStartKey = result.LastEvaluatedKey;
+    } else {
+      remainingData = false;
+    }
   }
+
+  return {
+    scannedCount,
+    count,
+  };
 }
