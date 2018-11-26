@@ -6,7 +6,7 @@
 [![MP](https://sistemaglobal.com.ar/assets/images/logoTeckelBit.png)](http://mpielvitori.github.io/)
 
 ### Usage
-##### isMutant function
+#### isMutant function
 Check DNA and persist data
 * **URL**
   _/mutant/_
@@ -33,7 +33,7 @@ Check DNA and persist data
   * **Code:** 500 Internal Server Error
     **Content:** `"Error message"`
 
-##### stats function
+#### stats function
 Return mutants stats
 * **URL**
   _/stats/_
@@ -58,7 +58,7 @@ Return mutants stats
     ```
 
 ### Make environment
-Create a configuration file in ```./config/config.<stage>.json``` with the following format
+Create a configuration file in ```./config/config.<stage>.json``` with the following format:
 ```json
 {
 	"DNA_DYNAMODB_ROLE": <awsRole>,
@@ -78,7 +78,7 @@ Coverage can be seen in `./coverage/lcov-report/index.html`
 ```sh
 yarn offline <stage>
 ```
-##### Build docker image
+### Build docker image
 ```sh
 docker build -t mutants --build-arg APP_ENV=<stage> .
 ```
