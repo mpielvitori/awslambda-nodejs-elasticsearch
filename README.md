@@ -1,4 +1,4 @@
-# Serverless + NodeJS + ElasticSearch 
+# AWS Lambda functions + NodeJS + ElasticSearch 
 ######  Sample Serverless and ElasticSearch Project with NodeJS using ECMAScript 6
 
 [![MP](https://sistemaglobal.com.ar/assets/images/logoTeckelBit.png)](http://mpielvitori.github.io/)
